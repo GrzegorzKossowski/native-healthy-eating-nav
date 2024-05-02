@@ -15,7 +15,8 @@ export default function EmailLoginScreen({ navigation }) {
             email,
             firstName: 'John',
             lastName: 'Doe',
-            token: 'ee454e543ed5f43af4',
+            password,
+            token: '9s8df7s98f9',
         });
     };
 

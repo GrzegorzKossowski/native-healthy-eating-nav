@@ -4,71 +4,101 @@ import BackgroundMainScreen from './BackgroundMainScreen';
 import COLORS from '../../styles/colors';
 import { useState } from 'react';
 import useAuth from '../../hooks/useAuth';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 export default function OnboardingScreen() {
     const { auth, setAuth } = useAuth();
-    const [firstName, setFirstName] = useState('John');
-    const [lastName, setLastName] = useState('Doe');
-    const [email, setEmail] = useState('john@doe.com');
-    const [password, setPassword] = useState('123456');
+    const [dateWake, setWakeDate] = useState(new Date());
+    const [dateSleep, setSleepDate] = useState(new Date());
+    const [showWakeUp, setShowWakeUp] = useState(false);
+    const [showGoSleep, setSetGoSleep] = useState(false);
 
-    const handleLogin = () => {
+    const handleGoApp = () => {
         setAuth(prev => {
             return {
-                firstName,
-                lastName,
-                email,
-                password,
+                ...prev,
+                token: '9s8df7s98f9',
+                dateWake,
+                dateSleep
             };
         });
-        navigation.navigate('OnboardScreen');
+    };
+
+    const onWakeChange = (event, selectedDate) => {
+        const currentDate = selectedDate;
+        setShowWakeUp(false);
+        setWakeDate(currentDate);
+    };
+    const onSleepChange = (event, selectedDate) => {
+        const currentDate = selectedDate;
+        setSetGoSleep(false);
+        setSleepDate(currentDate);
     };
 
     return (
         <BackgroundMainScreen>
             <View style={[styles.container, styles.center]}>
                 <View style={styles.formContainer}>
-                    <TextInput
-                        value={firstName}
-                        label={'First name'}
-                        onChangeText={e => setFirstName(e)}
-                    />
-                    <TextInput
-                        value={lastName}
-                        label={'Last name'}
-                        onChangeText={e => setLastName(e)}
-                    />
-                    <TextInput
-                        value={email}
-                        label={'Email'}
-                        onChangeText={e => setEmail(e)}
-                    />
-                    <TextInput
-                        value={password}
-                        label={'Password'}
-                        secureTextEntry={true}
-                        onChangeText={e => setPassword(e)}
-                    />
+                    <Button
+                        icon={'alarm'}
+                        mode='elevated'
+                        onPress={() => setShowWakeUp(true)}
+                        contentStyle={styles.button}
+                        buttonColor={COLORS.primaryDark}
+                        textColor={COLORS.white}
+                    >
+                        When do you wake up?
+                    </Button>
+                    {dateWake && (
+                        <Text>
+                            {dateWake.getHours()} {dateWake.getMinutes()}
+                        </Text>
+                    )}
+                    <Button
+                        icon={'bed'}
+                        mode='elevated'
+                        onPress={() => setSetGoSleep(true)}
+                        contentStyle={styles.button}
+                        buttonColor={COLORS.primaryDark}
+                        textColor={COLORS.white}
+                    >
+                        When do go to sleep?
+                    </Button>
+                    {dateSleep && (
+                        <Text>
+                            {dateSleep.getHours()} {dateSleep.getMinutes()}
+                        </Text>
+                    )}
+
+                    {showWakeUp && (
+                        <DateTimePicker
+                            testID='wakeUpTimePicker'
+                            value={dateWake}
+                            mode='time'
+                            is24Hour={true}
+                            onChange={onWakeChange}
+                        />
+                    )}
+                    {showGoSleep && (
+                        <DateTimePicker
+                            testID='sleepTimePicker'
+                            value={dateSleep}
+                            mode='time'
+                            is24Hour={true}
+                            onChange={onSleepChange}
+                        />
+                    )}
                 </View>
                 <View style={styles.buttonsContainer}>
                     <Button
-                        icon={'login'}
+                        icon={'hamburger'}
                         mode='elevated'
-                        onPress={handleLogin}
+                        onPress={handleGoApp}
                         contentStyle={styles.button}
                         buttonColor={COLORS.accent}
                         textColor={COLORS.white}
                     >
-                        Sign Up
-                    </Button>
-                </View>
-                <View style={styles.signUpContainer}>
-                    <Text>You already have an account?</Text>
-                    <Button
-                        mode='text'
-                        onPress={() => navigation.navigate('EmailLoginScreen')}
-                    >
-                        Sign In
+                        Let's Get Healthy!
                     </Button>
                 </View>
             </View>

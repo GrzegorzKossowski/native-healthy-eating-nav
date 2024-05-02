@@ -13,7 +13,7 @@ const OnboardingTitle = props => {
 
 export default function StackNavigator() {
     return (
-        <Navigator initialRouteName='OnboardScreen'>
+        <Navigator initialRouteName='WelcomeScreen'>
             <Screen
                 name='WelcomeScreen'
                 component={WelcomeScreen}
@@ -33,8 +33,10 @@ export default function StackNavigator() {
                 name='OnboardScreen'
                 component={OnboardingScreen}
                 options={{
-                    headerLeft: () => <></>,
-                    headerTitle: () => <Text>Onboarding</Text>,
+                    headerLeft: () => null,
+                    headerTitle: () => (
+                        <Text style={{ fontSize: 24 }}>Onboarding</Text>
+                    ),
                 }}
             />
         </Navigator>
